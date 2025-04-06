@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.hilt.android)
+    implementation(libs.lifecycle.viewmodel)
+
     ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
