@@ -1,11 +1,10 @@
-package com.example.memoapp.datasource
+package com.example.memoapp.data.source.local
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-
-class LocalTextDataSource @Inject constructor(@ApplicationContext context: Context) {
+class TextDataSource @Inject constructor(@ApplicationContext context: Context) {
 
     private val dir = context.filesDir
 
