@@ -1,9 +1,9 @@
 package com.example.memoapp.repository
 
-import com.example.memoapp.data.source.local.TextDataSource
+import com.example.memoapp.data.source.local.LocalTextDataSource
 import javax.inject.Inject
 
-class LocalTextRepository @Inject constructor(val dataSource: TextDataSource) : TextRepository {
+class LocalTextRepository @Inject constructor(val dataSource: LocalTextDataSource) : TextRepository {
 
     override suspend fun save(name: String, content: String): Boolean {
         return dataSource.save(name, content)

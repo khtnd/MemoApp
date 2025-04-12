@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: TextViewModel by viewModels()
-    private var number = 1
+    private val adapter: FileAdapter = FileAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,41 +32,28 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.save.setOnClickListener {
-            viewModel.save("file$number", "test1")
-            number++
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
 
-        binding.list.setOnClickListener {
-            viewModel.list()
-        }
+        val layoutManger = GridLayoutManager(this, 4)
+        binding.recyclerview.layoutManager = layoutManger
+        binding.data = AdapterData(adapter)
+
+        adapter.addFile(FileData("New File", R.drawable.newfile))
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.list.collect {
-                    binding.fileList.text = it.toString()
+                    it.map {
+                        adapter.addFile(FileData(it, R.drawable.textfile))
+                    }
                 }
             }
         }
 
-
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
-//
-//        val dataList = listOf(
-//            FileData(imgResId = R.drawable.ic_launcher_foreground, name = "File1"),
-//            FileData(imgResId = R.drawable.ic_launcher_foreground, name = "File2"),
-//            FileData(imgResId = R.drawable.ic_launcher_foreground, name = "File3"),
-//            FileData(imgResId = R.drawable.ic_launcher_foreground, name = "File4"),
-//        )
-//
-//        val adapter = FileAdapter(dataList)
-//        binding.data = AdapterData(adapter)
-//
-//        val layoutManger = GridLayoutManager(this, 3)
-//        binding.recyclerview.layoutManager = layoutManger
+        viewModel.list()
     }
 }

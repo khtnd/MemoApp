@@ -16,24 +16,6 @@
         android:orientation="vertical"
         tools:context=".view.MainActivity">
 
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="save"/>
-
-        <Button
-            android:id="@+id/load"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="load"/>
-
-        <Button
-            android:id="@+id/list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="list"/>
-
         <TextView
             android:id="@+id/file_list"
             android:layout_width="match_parent"
@@ -43,7 +25,6 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:adapter="@{data.adapter}"/>
 
     </LinearLayout>

@@ -2,11 +2,17 @@ package com.example.memoapp.data.source.local
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
 import javax.inject.Inject
 
-class TextDataSource @Inject constructor(@ApplicationContext context: Context) {
+class LocalTextDataSource @Inject constructor(@ApplicationContext context: Context) {
 
-    private val dir = context.filesDir
+    private val dir: File
+
+    init {
+        dir = File(context.filesDir.toString() + "/text")
+        dir.mkdirs()
+    }
 
     fun save(name: String, content: String): Boolean {
         val file = dir.resolve("$name.txt")
