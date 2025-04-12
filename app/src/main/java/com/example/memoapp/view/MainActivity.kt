@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.memoapp.R
-import com.example.memoapp.TextViewModel
+import com.example.memoapp.viewmodel.MainViewModel
 import com.example.memoapp.databinding.ActivityMainBinding
 import com.example.memoapp.view.recyclerview.AdapterData
 import com.example.memoapp.view.recyclerview.FileAdapter
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: TextViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private val adapter: FileAdapter = FileAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {

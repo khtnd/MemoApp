@@ -1,4 +1,4 @@
-package com.example.memoapp
+package com.example.memoapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TextViewModel @Inject constructor(private val repository: TextRepository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: TextRepository) : ViewModel() {
     private val _list = MutableStateFlow<List<String>>(emptyList())
     val list = _list.asStateFlow()
 
