@@ -11,7 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: TextRepository) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val repository: TextRepository
+) : ViewModel() {
+
     private val _list = MutableStateFlow<List<String>>(emptyList())
     val list = _list.asStateFlow()
 
@@ -21,7 +24,7 @@ class MainViewModel @Inject constructor(private val repository: TextRepository) 
         }
     }
 
-    suspend fun load(name: String) : String {
+    suspend fun load(name: String): String {
         val result = repository.load(name)
         return result.getOrDefault("")
     }

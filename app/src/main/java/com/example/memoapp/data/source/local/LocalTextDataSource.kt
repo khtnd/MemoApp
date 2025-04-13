@@ -6,7 +6,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class LocalTextDataSource @Inject constructor(@ApplicationContext context: Context) {
 
     private val mutex = Mutex()

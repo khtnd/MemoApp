@@ -42,17 +42,25 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = layoutManger
         binding.data = AdapterData(adapter)
 
-        adapter.addFile(FileData("New File", R.drawable.newfile))
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.list.collect {
                     it.map {
-                        adapter.addFile(FileData(it, R.drawable.textfile))
+                        FileData(it, R.drawable.textfile)
+                    }.let { fileDataList ->
+                        val list = fileDataList.toMutableList()
+                        list.add(0, FileData("New File", R.drawable.newfile))
+                        adapter.init(list)
                     }
                 }
             }
         }
+
+        viewModel.list()
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         viewModel.list()
     }

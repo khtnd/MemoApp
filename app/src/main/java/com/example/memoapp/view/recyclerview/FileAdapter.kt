@@ -30,6 +30,12 @@ class FileAdapter(private val fileData: MutableList<FileData> = mutableListOf<Fi
 
     override fun getItemCount(): Int = fileData.size
 
+    fun init(data: List<FileData>) {
+        fileData.clear()
+        fileData.addAll(data)
+        notifyDataSetChanged()
+    }
+
     fun addFile(data: FileData) {
         fileData.add(data)
         notifyItemInserted(fileData.size - 1)
