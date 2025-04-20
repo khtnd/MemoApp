@@ -55,7 +55,7 @@
             android:text="There is same file"
             android:textColor="#ff0000"
             android:textAlignment="center"
-            android:visibility="@{data.showError ? View.VISIBLE : View.GONE}"
+            android:visibility="@{data.showError ? View.VISIBLE : View.INVISIBLE}"
             android:padding="4dp" />
 
         <LinearLayout
@@ -69,7 +69,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:enabled="@{data.cancelEnabled}"
                 android:text="Cancel" />
 
             <Button
@@ -78,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:enabled="@{data.okEnabled}"
+                android:enabled="@{data.showError ? false : true}"
                 android:text="Ok" />
         </LinearLayout>
     </LinearLayout>
