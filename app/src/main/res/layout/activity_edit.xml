@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.edit.EditActivity">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.memoapp.viewmodel.edit.EditViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:onClick="@{(v) -> viewModel.onCancel()}"
+            android:text="취소하기" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:onClick="@{(v) -> viewModel.onSave()}"
+            android:text="저장하기" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@={viewModel.content}"
+        android:gravity="top"
+        android:background="@null"/>
+
+    </LinearLayout>
+</layout>
