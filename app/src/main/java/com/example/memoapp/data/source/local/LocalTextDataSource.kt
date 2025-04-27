@@ -23,9 +23,7 @@ class LocalTextDataSource @Inject constructor(@ApplicationContext context: Conte
     suspend fun save(name: String, content: String): Boolean {
         mutex.withLock {
             val file = dir.resolve("$name.txt")
-            return if (file.exists())
-                false
-            else try {
+            return try {
                 file.writeText(content)
                 true
             } catch (e: Exception) {
