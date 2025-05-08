@@ -1,11 +1,8 @@
 package com.example.memoapp.view
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -13,38 +10,41 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.memoapp.R
 import com.example.memoapp.viewmodel.MainViewModel
 import com.example.memoapp.databinding.ActivityMainBinding
-import com.example.memoapp.view.recyclerview.AdapterData
 import com.example.memoapp.view.recyclerview.FileAdapter
 import com.example.memoapp.view.recyclerview.FileData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private val adapter: FileAdapter = FileAdapter()
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        initRecyclerView()
+        registerCollectorToViewModel().also {
+            viewModel.updateFileList()
         }
+    }
 
-        val layoutManger = GridLayoutManager(this, 4)
-        binding.recyclerview.layoutManager = layoutManger
-        binding.data = AdapterData(adapter)
+    override fun getRootView(): View {
+        return binding.root
+    }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.updateFileList()
+    }
+
+    private fun registerCollectorToViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.list.collect {
+                viewModel.fileListFlow.collect {
                     it.map {
                         FileData(it, R.drawable.textfile)
                     }.let { fileDataList ->
@@ -55,13 +55,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        viewModel.list()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        viewModel.list()
+    private fun initRecyclerView() {
+        val layoutManger = GridLayoutManager(this, 4)
+        binding.recyclerview.layoutManager = layoutManger
+        binding.recyclerview.adapter = adapter
     }
 }

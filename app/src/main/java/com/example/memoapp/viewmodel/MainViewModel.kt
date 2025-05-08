@@ -15,26 +15,15 @@ class MainViewModel @Inject constructor(
     private val repository: TextRepository
 ) : ViewModel() {
 
-    private val _list = MutableStateFlow<List<String>>(emptyList())
-    val list = _list.asStateFlow()
+    private val _fileListFlow = MutableStateFlow<List<String>>(emptyList())
+    val fileListFlow = _fileListFlow.asStateFlow()
 
-    fun save(name: String, content: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.save(name, content)
-        }
-    }
-
-    suspend fun load(name: String): String {
-        val result = repository.load(name)
-        return result.getOrDefault("")
-    }
-
-    fun list() {
+    fun updateFileList() {
         viewModelScope.launch(Dispatchers.IO) {
             val list = repository.fileList()
             if (list.isSuccess) {
                 launch(Dispatchers.Main) {
-                    _list.emit(list.getOrDefault(emptyList()))
+                    _fileListFlow.emit(list.getOrDefault(emptyList()))
                 }
             }
         }
