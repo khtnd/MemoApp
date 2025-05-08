@@ -2,7 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.edit.EditActivity">
+
     <data>
+        <import type="android.view.View"/>
+        <import type="com.example.memoapp.constants.EditMode"/>
+
         <variable
             name="viewModel"
             type="com.example.memoapp.viewmodel.edit.EditViewModel" />
@@ -14,34 +18,52 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:onClick="@{(v) -> viewModel.onCancel()}"
-            android:text="취소하기" />
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.showEditMenu ? View.VISIBLE : View.GONE}">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(v) -> viewModel.onCancel()}"
+                android:padding="15dp"
+                android:text="취소하기" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(v) -> viewModel.onSave()}"
+                android:padding="15dp"
+                android:text="저장하기" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:onClick="@{(v) -> viewModel.onSave()}"
-            android:text="저장하기" />
-    </LinearLayout>
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.showViewMenu ? View.VISIBLE : View.GONE}">
 
-    <EditText
-        android:id="@+id/edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@={viewModel.content}"
-        android:gravity="top"
-        android:background="@null"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(v) -> viewModel.onChange(EditMode.CHANGE)}"
+                android:padding="15dp"
+                android:text="변경하기" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="top"
+            android:text="@={viewModel.content}" />
 
     </LinearLayout>
 </layout>
