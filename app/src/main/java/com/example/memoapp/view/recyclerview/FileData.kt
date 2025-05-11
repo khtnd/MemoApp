@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memoapp.constants.KEY_FILE_NAME
-import com.example.memoapp.view.MainActivity
 import com.example.memoapp.view.edit.EditActivity
 import com.example.memoapp.view.newfile.NewFileActivity
 
