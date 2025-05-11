@@ -8,10 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.memoapp.R
-import com.example.memoapp.viewmodel.MainViewModel
 import com.example.memoapp.databinding.ActivityMainBinding
 import com.example.memoapp.view.recyclerview.FileAdapter
 import com.example.memoapp.view.recyclerview.FileData
+import com.example.memoapp.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

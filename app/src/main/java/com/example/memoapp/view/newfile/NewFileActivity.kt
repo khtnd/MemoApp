@@ -4,14 +4,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.memoapp.R
 import com.example.memoapp.databinding.ActivityNewFileBinding
 import com.example.memoapp.view.ActivityInitializeTemplate
 import com.example.memoapp.view.BaseActivity
