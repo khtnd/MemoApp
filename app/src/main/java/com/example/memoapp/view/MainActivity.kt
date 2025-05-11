@@ -26,35 +26,42 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         initRecyclerView()
-        registerCollectorToViewModel().also {
-            viewModel.updateFileList()
-        }
+
+        viewModel.updateFileList()
     }
 
-    override fun getRootView(): View {
-        return binding.root
+    override fun getTemplate(): ActivityInitializeTemplate {
+        return object: ActivityInitializeTemplate() {
+            override fun mainView(): View {
+                return binding.root
+            }
+
+            override fun registerFlow() {
+                lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        viewModel.fileListFlow.collect {
+                            it.map {
+                                FileData(it, R.drawable.textfile)
+                            }.let { fileDataList ->
+                                val list = fileDataList.toMutableList()
+                                list.add(0, FileData("New File", R.drawable.newfile))
+                                adapter.init(list)
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun registerListener() {}
+
+            override fun collectViewValues() {}
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
         viewModel.updateFileList()
-    }
-
-    private fun registerCollectorToViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fileListFlow.collect {
-                    it.map {
-                        FileData(it, R.drawable.textfile)
-                    }.let { fileDataList ->
-                        val list = fileDataList.toMutableList()
-                        list.add(0, FileData("New File", R.drawable.newfile))
-                        adapter.init(list)
-                    }
-                }
-            }
-        }
     }
 
     private fun initRecyclerView() {
