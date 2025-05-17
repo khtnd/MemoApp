@@ -38,6 +38,7 @@ class EditActivity : BaseActivity() {
     override fun getTemplate(): ActivityInitializeTemplate {
         return object: ActivityInitializeTemplate() {
             override fun mainView(): View {
+                keyListener = binding.editText.keyListener
                 return binding.root
             }
 
@@ -58,10 +59,6 @@ class EditActivity : BaseActivity() {
             }
 
             override fun registerListener() { }
-
-            override fun collectViewValues() {
-                keyListener = binding.editText.keyListener
-            }
 
         }
     }

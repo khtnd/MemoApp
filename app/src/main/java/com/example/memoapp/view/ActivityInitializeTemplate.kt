@@ -9,7 +9,6 @@ abstract class ActivityInitializeTemplate {
     protected abstract fun mainView(): View
     protected abstract fun registerFlow()
     protected abstract fun registerListener()
-    protected abstract fun collectViewValues()
 
     fun execute(activity: Activity) {
         mainView().let { mainView ->
