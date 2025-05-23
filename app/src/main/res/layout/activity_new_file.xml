@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="com.example.memoapp.vo.NewFileActivityBindingVo" />
+            type="com.example.memoapp.types.NewFileActivityBindingVo" />
     </data>
 
     <LinearLayout

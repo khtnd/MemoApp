@@ -3,6 +3,8 @@ package com.example.memoapp.viewmodel.newfile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memoapp.repository.TextRepository
+import com.example.memoapp.types.FileContent
+import com.example.memoapp.types.FileName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +17,7 @@ class NewFileViewModel @Inject constructor(
     private val repository: TextRepository,
 ) : ViewModel() {
 
-    private val _fileList = MutableStateFlow<List<String>>(emptyList())
+    private val _fileList = MutableStateFlow<List<FileName>>(emptyList())
     val fileList = _fileList.asStateFlow()
 
     fun update() {
@@ -29,7 +31,7 @@ class NewFileViewModel @Inject constructor(
 
     fun save(name: String) {
         viewModelScope.launch {
-            repository.save(name, "")
+            repository.save(FileName(name), FileContent(""))
         }
     }
 }

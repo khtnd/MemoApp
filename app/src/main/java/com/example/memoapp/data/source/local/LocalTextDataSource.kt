@@ -1,6 +1,9 @@
 package com.example.memoapp.data.source.local
 
 import android.content.Context
+import com.example.memoapp.types.Exceptions
+import com.example.memoapp.types.FileContent
+import com.example.memoapp.types.FileName
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,11 +23,11 @@ class LocalTextDataSource @Inject constructor(@ApplicationContext context: Conte
         dir.mkdirs()
     }
 
-    suspend fun save(name: String, content: String): Boolean {
+    suspend fun save(name: FileName, content: FileContent): Boolean {
         mutex.withLock {
-            val file = dir.resolve("$name.txt")
+            val file = dir.resolve("${name.value}.txt")
             return try {
-                file.writeText(content)
+                file.writeText(content.value)
                 true
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -33,23 +36,23 @@ class LocalTextDataSource @Inject constructor(@ApplicationContext context: Conte
         }
     }
 
-    suspend fun load(name: String): Result<String> {
+    suspend fun load(name: FileName): Result<FileContent> {
         mutex.withLock {
-            val file = dir.resolve("$name.txt")
+            val file = dir.resolve("${name.value}.txt")
             return if (file.exists().not()) {
-                Result.failure(Exception("파일 없음"))
+                Result.failure(Exceptions.NO_FILE)
             } else try {
-                Result.success(file.readText())
+                Result.success(FileContent(file.readText()))
             } catch (e: Exception) {
-                Result.failure(Exception("파일 로드 실패"))
+                Result.failure(Exceptions.LOAD_FAILURE)
             }
         }
     }
 
-    suspend fun list(): Result<List<String>> {
+    suspend fun list(): Result<List<FileName>> {
         mutex.withLock {
             return try {
-                val files = dir.listFiles()?.map { it.nameWithoutExtension } ?: emptyList()
+                val files = dir.listFiles()?.map { FileName(it.nameWithoutExtension) } ?: emptyList()
                 Result.success(files)
             } catch (e: Exception) {
                 e.printStackTrace()

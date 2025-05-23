@@ -1,4 +1,4 @@
-package com.example.memoapp.vo
+package com.example.memoapp.types
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable

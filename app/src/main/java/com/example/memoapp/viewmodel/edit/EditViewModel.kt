@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memoapp.constants.EditMode
 import com.example.memoapp.repository.TextRepository
+import com.example.memoapp.types.FileContent
+import com.example.memoapp.types.FileName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditViewModel @Inject constructor(
     private val repository: TextRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val _finishActivity = MutableStateFlow<Boolean>(false)
     val finishActivity = _finishActivity.asStateFlow()
@@ -26,7 +28,7 @@ class EditViewModel @Inject constructor(
     val enabledInput = _enabledInput.asStateFlow()
 
     val content = ObservableField<String>()
-    var fileName  = ""
+    var name = ""
 
     val showViewMenu = ObservableField<Boolean>()
     val showEditMenu = ObservableField<Boolean>()
@@ -38,25 +40,28 @@ class EditViewModel @Inject constructor(
         content.set("")
     }
 
-    fun loadFile(fileName: String) {
+    fun loadFile(fileName: FileName) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 repository.load(fileName)
             }.let { result ->
                 withContext(Dispatchers.Main) {
-                    if (result.isSuccess)
-                        content.set(result.getOrDefault(""))
+                    content.set(result.getOrElse { exception ->
+                        FileContent(
+                            exception.message ?: ""
+                        )
+                    }.value)
                 }
             }
         }
     }
 
     fun onSave() {
-        if (fileName.isEmpty())
+        if (name.isEmpty())
             return
 
         viewModelScope.launch(Dispatchers.IO) {
-            repository.save(fileName, content.get() ?: "")
+            repository.save(FileName(name), FileContent(content.get() ?: ""))
         }
 
         _finishActivity.update { true }
@@ -77,6 +82,7 @@ class EditViewModel @Inject constructor(
                 showEditMenu.set(false)
                 _enabledInput.value = false
             }
+
             EditMode.CHANGE -> {
                 showViewMenu.set(false)
                 showEditMenu.set(true)

@@ -41,7 +41,7 @@ class MainActivity : BaseActivity() {
                     repeatOnLifecycle(Lifecycle.State.STARTED) {
                         viewModel.fileListFlow.collect {
                             it.map {
-                                FileData(it, R.drawable.textfile)
+                                FileData(it.value, R.drawable.textfile)
                             }.let { fileDataList ->
                                 val list = fileDataList.toMutableList()
                                 list.add(0, FileData("New File", R.drawable.newfile))
@@ -53,8 +53,6 @@ class MainActivity : BaseActivity() {
             }
 
             override fun registerListener() {}
-
-            override fun collectViewValues() {}
         }
     }
 

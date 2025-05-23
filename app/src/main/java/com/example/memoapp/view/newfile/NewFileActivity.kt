@@ -9,10 +9,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.memoapp.databinding.ActivityNewFileBinding
+import com.example.memoapp.types.FileName
 import com.example.memoapp.view.ActivityInitializeTemplate
 import com.example.memoapp.view.BaseActivity
 import com.example.memoapp.viewmodel.newfile.NewFileViewModel
-import com.example.memoapp.vo.NewFileActivityBindingVo
+import com.example.memoapp.types.NewFileActivityBindingVo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -21,7 +22,7 @@ class NewFileActivity : BaseActivity() {
 
     private val viewModel: NewFileViewModel by viewModels()
     private val bindingVo = NewFileActivityBindingVo()
-    private var fileList = emptyList<String>()
+    private var fileList = emptyList<FileName>()
     private val binding: ActivityNewFileBinding by lazy {
         ActivityNewFileBinding.inflate(layoutInflater)
     }
@@ -81,7 +82,7 @@ class NewFileActivity : BaseActivity() {
                     }
 
                     override fun afterTextChanged(s: Editable?) {
-                        if (fileList.contains(s.toString())) {
+                        if (fileList.any{ it.value == s.toString() }) {
                             bindingVo.okEnabled = false
                             bindingVo.showError = true
                         } else {
@@ -98,8 +99,6 @@ class NewFileActivity : BaseActivity() {
 
                 })
             }
-
-            override fun collectViewValues() { }
 
         }
     }

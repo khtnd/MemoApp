@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.memoapp.constants.KEY_FILE_NAME
 import com.example.memoapp.databinding.ActivityEditBinding
+import com.example.memoapp.types.FileName
 import com.example.memoapp.view.ActivityInitializeTemplate
 import com.example.memoapp.view.BaseActivity
 import com.example.memoapp.viewmodel.edit.EditViewModel
@@ -31,8 +32,8 @@ class EditActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         val fileName = getFileNameExtra()
-        viewModel.fileName = fileName
-        viewModel.loadFile(fileName)
+        viewModel.name = fileName
+        viewModel.loadFile(FileName(fileName))
     }
 
     override fun getTemplate(): ActivityInitializeTemplate {
