@@ -30,6 +30,7 @@ class EditActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         val fileName = getFileNameExtra()
         viewModel.name = fileName
