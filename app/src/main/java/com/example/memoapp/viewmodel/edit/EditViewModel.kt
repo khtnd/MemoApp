@@ -21,23 +21,23 @@ class EditViewModel @Inject constructor(
     private val repository: TextRepository,
 ) : ViewModel() {
 
-    private val _finishActivity = MutableStateFlow<Boolean>(false)
+    private val _finishActivity = MutableStateFlow(false)
     val finishActivity = _finishActivity.asStateFlow()
 
-    private val _enabledInput = MutableStateFlow<Boolean>(false)
+    private val _enabledInput = MutableStateFlow(false)
     val enabledInput = _enabledInput.asStateFlow()
 
-    val content = ObservableField<String>()
+    private var _originContent = ""
+    val content = ObservableField("")
     var name = ""
 
-    val showViewMenu = ObservableField<Boolean>()
-    val showEditMenu = ObservableField<Boolean>()
+    val showViewMenu = MutableStateFlow(true)
+    val showEditMenu = MutableStateFlow(false)
 
     init {
-        showViewMenu.set(true)
-        showEditMenu.set(false)
-        _enabledInput.value = false
-        content.set("")
+        showViewMenu.update { true }
+        showEditMenu.update { false }
+        _enabledInput.update { false }
     }
 
     fun loadFile(fileName: FileName) {
@@ -45,30 +45,35 @@ class EditViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 repository.load(fileName)
             }.let { result ->
-                withContext(Dispatchers.Main) {
-                    content.set(result.getOrElse { exception ->
-                        FileContent(
-                            exception.message ?: ""
-                        )
-                    }.value)
+                result.getOrElse { exception ->
+                    FileContent(
+                        exception.message ?: ""
+                    )
+                }.let { fileContent ->
+                    content.set(fileContent.value)
+                    _originContent = fileContent.value
                 }
             }
         }
     }
 
-    fun onSave() {
+    fun onSave(changedText: String) {
         if (name.isEmpty())
             return
 
         viewModelScope.launch(Dispatchers.IO) {
-            repository.save(FileName(name), FileContent(content.get() ?: ""))
+            repository.save(FileName(name), FileContent(changedText))
         }
+
+        _originContent = changedText
 
         _finishActivity.update { true }
     }
 
     fun onCancel() {
         changeMode(EditMode.VIEW)
+
+        content.set(_originContent)
     }
 
     fun onChange(mode: EditMode) {
@@ -78,15 +83,15 @@ class EditViewModel @Inject constructor(
     private fun changeMode(mode: EditMode) {
         when (mode) {
             EditMode.VIEW -> {
-                showViewMenu.set(true)
-                showEditMenu.set(false)
-                _enabledInput.value = false
+                showViewMenu.update { true }
+                showEditMenu.update { false }
+                _enabledInput.update { false }
             }
 
             EditMode.CHANGE -> {
-                showViewMenu.set(false)
-                showEditMenu.set(true)
-                _enabledInput.value = true
+                showViewMenu.update { false }
+                showEditMenu.update { true }
+                _enabledInput.update { true }
             }
         }
     }
